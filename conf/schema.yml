@@ -1,0 +1,7 @@
+--- 
+relation: 
+    name: Triple
+    schema:
+    subject: s
+    predicate: p
+    object: o

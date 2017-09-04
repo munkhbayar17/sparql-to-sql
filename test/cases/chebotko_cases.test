@@ -1,0 +1,85 @@
+>>> from Controller.controller import translate
+
+>>> translate('''SELECT ?a ?n ?e ?w WHERE { { {?a :name ?n} OPTIONAL {?a :email ?e} } OPTIONAL {?a :web ?w} }''', True)
+SELECT Coalesce(q1.a, q2.a) as a, n, e, w
+FROM (SELECT Coalesce(q1.a, q2.a) as a, name, n, email, e
+FROM (SELECT s as a, p as name, o as n
+FROM Triple
+WHERE p = ':name') as q1
+LEFT OUTER JOIN (SELECT s as a, p as email, o as e
+FROM Triple
+WHERE p = ':email') as q2
+ON (q1.a=q2.a or q1.a=Null or q2.a=Null)) as q1
+LEFT OUTER JOIN (SELECT s as a, p as web, o as w
+FROM Triple
+WHERE p = ':web') as q2
+ON (q1.a=q2.a or q1.a=Null or q2.a=Null)
+
+>>> translate('''SELECT ?a ?n ?ew WHERE { { {?a :name ?n} OPTIONAL {?a :email ?ew} } OPTIONAL {?a :web ?ew} }''', True)
+SELECT Coalesce(q1.a, q2.a) as a, n, Coalesce(q1.ew, q2.ew) as ew
+FROM (SELECT Coalesce(q1.a, q2.a) as a, name, n, email, ew
+FROM (SELECT s as a, p as name, o as n
+FROM Triple
+WHERE p = ':name') as q1
+LEFT OUTER JOIN (SELECT s as a, p as email, o as ew
+FROM Triple
+WHERE p = ':email') as q2
+ON (q1.a=q2.a or q1.a=Null or q2.a=Null)) as q1
+LEFT OUTER JOIN (SELECT s as a, p as web, o as ew
+FROM Triple
+WHERE p = ':web') as q2
+ON (q1.a=q2.a or q1.a=Null or q2.a=Null) AND (q1.ew=q2.ew or q1.ew=Null or q2.ew=Null)
+
+>>> translate('''SELECT ?a ?n ?e ?w WHERE {{?a :name ?n} OPTIONAL {{?a :email ?e} OPTIONAL {?a :web ?w}}}''', True)
+SELECT Coalesce(q1.a, q2.a) as a, n, e, w
+FROM (SELECT s as a, p as name, o as n
+FROM Triple
+WHERE p = ':name') as q1
+INNER JOIN (SELECT Coalesce(q1.a, q2.a) as a, email, e, web, w
+FROM (SELECT s as a, p as email, o as e
+FROM Triple
+WHERE p = ':email') as q1
+LEFT OUTER JOIN (SELECT s as a, p as web, o as w
+FROM Triple
+WHERE p = ':web') as q2
+ON (q1.a=q2.a or q1.a=Null or q2.a=Null)) as q2
+ON (q1.a=q2.a or q1.a=Null or q2.a=Null)
+
+>>> translate('''SELECT ?x ?y ?z WHERE {{?x :name 'paul'} OPTIONAL {{?y :name 'george'} OPTIONAL {?x :email ?z}}}''', True)
+SELECT Coalesce(q1.x, q2.x) as x, y, z
+FROM (SELECT s as x, p as name, o as paul
+FROM Triple
+WHERE p = ':name' AND o = 'paul') as q1
+INNER JOIN (SELECT y, name, george, x, email, z
+FROM (SELECT s as y, p as name, o as george
+FROM Triple
+WHERE p = ':name' AND o = 'george') as q1
+LEFT OUTER JOIN (SELECT s as x, p as email, o as z
+FROM Triple
+WHERE p = ':email') as q2
+ON False) as q2
+ON (q1.x=q2.x or q1.x=Null or q2.x=Null) AND (q1.name=q2.name or q1.name=Null or q2.name=Null)
+
+>>> translate('''SELECT ?a ?n ?p WHERE {{?a :name ?n} {{?a :phone ?p} UNION {?a :cell ?p}}}''', True)
+SELECT Coalesce(q1.a, q2.a) as a, n, p
+FROM (SELECT s as a, p as name, o as n
+FROM Triple
+WHERE p = ':name') as q1
+INNER JOIN (SELECT phone, cell, q1.a, q1.p
+FROM (SELECT s as a, p as phone, o as p
+FROM Triple
+WHERE p = ':phone') as q1
+LEFT OUTER JOIN (SELECT s as a, p as cell, o as p
+FROM Triple
+WHERE p = ':cell') as q2
+ON False
+UNION
+SELECT cell, phone, q1.a, q1.p
+FROM (SELECT s as a, p as cell, o as p
+FROM Triple
+WHERE p = ':cell') as q1
+LEFT OUTER JOIN (SELECT s as a, p as phone, o as p
+FROM Triple
+WHERE p = ':phone') as q2
+ON False) as q2
+ON (q1.a=q2.a or q1.a=Null or q2.a=Null)

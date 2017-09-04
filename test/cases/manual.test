@@ -1,0 +1,40 @@
+>>> from Controller.controller import translate
+
+>>> translate('''SELECT ?a ?e ?w WHERE {{?a :email ?e} {?a :web ?w}}''', True)
+SELECT Coalesce(q1.a, q2.a) as a, e, w
+FROM (SELECT s as a, p as email, o as e
+FROM Triple
+WHERE p = ':email') as q1
+INNER JOIN (SELECT s as a, p as web, o as w
+FROM Triple
+WHERE p = ':web') as q2
+ON (q1.a=q2.a or q1.a=Null or q2.a=Null)
+
+>>> translate('''SELECT ?a ?e ?w WHERE {{?a :email ?e} OPTIONAL {?a :web ?w}}''', True)
+SELECT Coalesce(q1.a, q2.a) as a, e, w
+FROM (SELECT s as a, p as email, o as e
+FROM Triple
+WHERE p = ':email') as q1
+LEFT OUTER JOIN (SELECT s as a, p as web, o as w
+FROM Triple
+WHERE p = ':web') as q2
+ON (q1.a=q2.a or q1.a=Null or q2.a=Null)
+
+>>> translate('''SELECT ?a ?e ?w WHERE {{?a :email ?e} UNION {?a :web ?w}}''', True)
+SELECT q1.a, e, w
+FROM (SELECT s as a, p as email, o as e
+FROM Triple
+WHERE p = ':email') as q1
+LEFT OUTER JOIN (SELECT s as a, p as web, o as w
+FROM Triple
+WHERE p = ':web') as q2
+ON False
+UNION
+SELECT q1.a, e, w
+FROM (SELECT s as a, p as web, o as w
+FROM Triple
+WHERE p = ':web') as q1
+LEFT OUTER JOIN (SELECT s as a, p as email, o as e
+FROM Triple
+WHERE p = ':email') as q2
+ON False

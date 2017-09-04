@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>SPARQL to SQL</title>
+    <meta name="author" content="Munkhbayar Nergui"/>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/style.css')}}"/>
+</head>
+<body>
+<div class="header">
+    <h1>SPARQL to SQL translator</h1>
+</div>
+
+<div class="main" ng-app="transApp">
+    <div ng-controller="translatorApp">
+        <div class="db-selector">
+            <label>Dataset: </label>
+            <select ng-model="dbName" ng-change="change_db()">
+                <option selected>Persons</option>
+                <option>Capitals</option>
+                <option>Currencies</option>
+            </select>
+            &nbsp;&nbsp;&nbsp;
+            <label>Translator algorithm: </label>
+            <select ng-model="translatorType">
+                <option selected value="1">trans</option>
+                <option value="2">trans-s</option>
+                <option value="3">trans-sqe</option>
+            </select>
+        </div>
+        <div class="sparql-section">
+            <div class="query-section">
+                <textarea id="sparql-input" ng-model="sparql"></textarea>
+            </div>
+        </div>
+        <div class="sql-section">
+            <div class="query-section">
+                <textarea id="sql-output" ng-model="sql"></textarea>
+            </div>
+        </div>
+        <div class="form-section">
+            <button id="submit" ng-disabled="translating" ng-click="translate()">translate</button>
+            <button id="run-query" class="ng-cloak" ng-click="runQuery()" ng-show="sql">run sql</button>
+
+            <div class="message {{'{{messageClass}}'}}">
+                {{'{{messageText}}'}}
+            </div>
+        </div>
+
+        <div class="result ng-cloak" ng-show="showResult">
+            <p>Result: {{'{{resultMsg}}'}}</p>
+
+            <div class="search-group ng-cloak" ng-show="anyResult">
+                <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                <input type="text" class="search-input ng-pristine ng-valid ng-touched" placeholder="Search" ng-model="searchText">
+            </div>
+
+            <table class="ng-cloak" ng-show="anyResult">
+                <thead>
+                    <th ng-repeat="header in headers track by $index" ng-click="sql=header">
+                        <span>
+                            {{'{{header}}'}}
+                        </span>
+                    </th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="row in sqlResult | orderBy:sortType:sortReverse | filter:searchText">
+                        <td ng-repeat="node in row track by $index">
+                            {{'{{node}}'}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="footer"></div>
+
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/angular.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/translatorApp.js')}}"></script>
+</body>
+</html>

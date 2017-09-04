@@ -1,0 +1,106 @@
+>>> from Controller.controller import translate
+
+>>> translate('''SELECT ?book ?x ?y WHERE { { ?book dc10:title ?x } UNION { ?book dc11:title ?y } }''', True)
+SELECT q1.book, x, y
+FROM (SELECT s as book, p as dc10title, o as x
+FROM Triple
+WHERE p = 'dc10:title') as q1
+LEFT OUTER JOIN (SELECT s as book, p as dc11title, o as y
+FROM Triple
+WHERE p = 'dc11:title') as q2
+ON False
+UNION
+SELECT q1.book, x, y
+FROM (SELECT s as book, p as dc11title, o as y
+FROM Triple
+WHERE p = 'dc11:title') as q1
+LEFT OUTER JOIN (SELECT s as book, p as dc10title, o as x
+FROM Triple
+WHERE p = 'dc10:title') as q2
+ON False
+
+>>> translate('''SELECT ?book ?x ?y WHERE { { ?book dc10:title ?x } { ?book dc11:title ?y } }''', True)
+SELECT Coalesce(q1.book, q2.book) as book, x, y
+FROM (SELECT s as book, p as dc10title, o as x
+FROM Triple
+WHERE p = 'dc10:title') as q1
+INNER JOIN (SELECT s as book, p as dc11title, o as y
+FROM Triple
+WHERE p = 'dc11:title') as q2
+ON (q1.book=q2.book or q1.book=Null or q2.book=Null)
+
+>>> translate('''SELECT ?x ?y ?nickY WHERE { ?x foaf:knows ?y { ?y foaf:nick ?nickY } }''', True)
+SELECT x, Coalesce(q1.y, q2.y) as y, nickY
+FROM (SELECT s as x, p as foafknows, o as y
+FROM Triple
+WHERE p = 'foaf:knows') as q1
+INNER JOIN (SELECT s as y, p as foafnick, o as nickY
+FROM Triple
+WHERE p = 'foaf:nick') as q2
+ON (q1.y=q2.y or q1.y=Null or q2.y=Null)
+
+>>> translate('''SELECT ?x ?y ?nickY WHERE { {?x foaf:knows ?y} OPTIONAL { ?y foaf:nick ?nickY } }''', True)
+SELECT x, Coalesce(q1.y, q2.y) as y, nickY
+FROM (SELECT s as x, p as foafknows, o as y
+FROM Triple
+WHERE p = 'foaf:knows') as q1
+LEFT OUTER JOIN (SELECT s as y, p as foafnick, o as nickY
+FROM Triple
+WHERE p = 'foaf:nick') as q2
+ON (q1.y=q2.y or q1.y=Null or q2.y=Null)
+
+>>> translate('''SELECT ?x ?y ?nickY WHERE { {?x foaf:knows ?y} OPTIONAL { ?y foaf:nick ?nickY OPTIONAL { ?y foaf:birthday ?bday } } }''', True)
+SELECT x, Coalesce(q1.y, q2.y) as y, nickY
+FROM (SELECT s as x, p as foafknows, o as y
+FROM Triple
+WHERE p = 'foaf:knows') as q1
+INNER JOIN (SELECT Coalesce(q1.y, q2.y) as y, foafnick, nickY, foafbirthday, bday
+FROM (SELECT s as y, p as foafnick, o as nickY
+FROM Triple
+WHERE p = 'foaf:nick') as q1
+LEFT OUTER JOIN (SELECT s as y, p as foafbirthday, o as bday
+FROM Triple
+WHERE p = 'foaf:birthday') as q2
+ON (q1.y=q2.y or q1.y=Null or q2.y=Null)) as q2
+ON (q1.y=q2.y or q1.y=Null or q2.y=Null)
+
+>>> translate('''SELECT ?name ?mbox ?hpage WHERE { ?x foaf:name ?name . OPTIONAL { ?x foaf:mbox ?mbox } .OPTIONAL { ?x foaf:homepage ?hpage } }''', True)
+SELECT name, mbox, hpage
+FROM (SELECT Coalesce(q1.x, q2.x) as x, foafname, name, foafmbox, mbox
+FROM (SELECT s as x, p as foafname, o as name
+FROM Triple
+WHERE p = 'foaf:name') as q1
+LEFT OUTER JOIN (SELECT s as x, p as foafmbox, o as mbox
+FROM Triple
+WHERE p = 'foaf:mbox') as q2
+ON (q1.x=q2.x or q1.x=Null or q2.x=Null)) as q1
+LEFT OUTER JOIN (SELECT s as x, p as foafhomepage, o as hpage
+FROM Triple
+WHERE p = 'foaf:homepage') as q2
+ON (q1.x=q2.x or q1.x=Null or q2.x=Null)
+
+>>> translate('''SELECT  ?title ?price WHERE   { ?x ns:price ?price . FILTER (?price < 30.5 && ?price != 10 || ?price = -1) }''', True)
+SELECT o as price
+FROM Triple
+WHERE p = 'ns:price' AND ( o < 30.5 AND o != 10 OR o = -1 )
+
+>>> translate('''SELECT  ?x ?price WHERE { ?x ns:price ?price . FILTER ( BOUND(?price) ) }''', True)
+SELECT s as x, o as price
+FROM Triple
+WHERE p = 'ns:price' AND o IS NOT null
+
+>>> translate('''SELECT  ?x ?price WHERE { ?x ns:price ?price . FILTER ( BOUND(?price) && ?price = 0 ) }''', True)
+SELECT s as x, o as price
+FROM Triple
+WHERE p = 'ns:price' AND ( o IS NOT null AND o = 0 )
+
+>>> translate('''SELECT  ?title ?price WHERE   { ?x ns:price ?price . FILTER (?price < 30.5) ?x dc:title ?title . }''', True)
+SELECT title, price
+FROM (SELECT s as x, p as dctitle, o as title
+FROM Triple
+WHERE p = 'dc:title') as q1
+INNER JOIN (SELECT s as x, p as nsprice, o as price
+FROM Triple
+WHERE p = 'ns:price') as q2
+ON (q1.x=q2.x or q1.x=Null or q2.x=Null)
+WHERE price < 30.5

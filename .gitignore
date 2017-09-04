@@ -1,0 +1,13 @@
+.idea/*
+.idea/misc.xml
+.idea/sparql.iml
+__pycache__/*
+Classes/*.pyc
+Classes/__pycache__
+Connection/*.pyc
+Connection/__pycache__
+Helpers/__pycache__/
+Parser/__pycache__/
+Translator/__pycache__/
+*.pyc
+*.db
