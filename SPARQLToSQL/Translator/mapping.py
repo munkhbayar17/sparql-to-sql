@@ -1,13 +1,13 @@
 import yaml
 
-from ..Classes.Classes import Relation
+from SPARQLToSQL.Classes.Classes import Relation
 from .constants import *
 
 
 def load_yaml(test_mode=False):
     try:
         import sys
-        schema = open("../conf/schema.yml", "r")
+        schema = open("schema.yml", "r")
 
         schema_obj = yaml.load(schema)
 
@@ -38,19 +38,3 @@ def beta(tp, pos):
 
     if pos == OBJECT:
         return RELATION.object
-
-
-def name(attr_name):
-    attr_name = str(attr_name)
-
-    return format_name(attr_name)
-
-
-def format_name(attr_name):
-    attr_name = attr_name.replace(':', '')
-    attr_name = attr_name.replace('?', '')
-    attr_name = attr_name.replace('$', '')
-    attr_name = attr_name.replace('"', '')
-    attr_name = attr_name.replace("'", '')
-
-    return attr_name

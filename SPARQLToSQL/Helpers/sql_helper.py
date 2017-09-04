@@ -1,4 +1,4 @@
-from sparql.src.Classes.RelationalClasses import *
+from ..Classes.RelationalClasses import *
 
 
 # SQL class helpers

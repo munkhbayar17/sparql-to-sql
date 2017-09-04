@@ -1,8 +1,8 @@
 from antlr4.tree import Tree
 
-from sparql.src.Classes.RDFClasses import *
-from sparql.src.Parser.SparqlParser import *
-from sparql.src.Translator.auxiliary_functions import *
+from SPARQLToSQL.Classes.RDFClasses import *
+from SPARQLToSQL.Translator.auxiliary_functions import *
+from SPARQLToSQL.Parser.SparqlParser import *
 
 
 # parser helper

@@ -1,9 +1,0 @@
-README.rst
-setup.py
-sparql/__init__.py
-sparql.egg-info/PKG-INFO
-sparql.egg-info/SOURCES.txt
-sparql.egg-info/dependency_links.txt
-sparql.egg-info/entry_points.txt
-sparql.egg-info/requires.txt
-sparql.egg-info/top_level.txt

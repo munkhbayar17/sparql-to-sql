@@ -1,3 +1,0 @@
-[console_scripts]
-encrypt = sparql.main:translate
-
