@@ -1,4 +1,4 @@
-from sparql.src.Classes.RDFClasses import IRI
+from ..Classes.RDFClasses import IRI
 
 
 class SQLQuery:
