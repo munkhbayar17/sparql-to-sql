@@ -1,9 +1,8 @@
-from .mapping import *
-from SPARQLToSQL.Translator.auxiliary_functions import *
-from SPARQLToSQL.Classes.RelationalClasses import *
-from SPARQLToSQL.Helpers.parser_helper import *
-from SPARQLToSQL.Helpers.sql_helper import *
-from SPARQLToSQL.Helpers.translation_helper import *
+from SPARQLToSQL.parser_helper import *
+from SPARQLToSQL.translation_helper import *
+from SPARQLToSQL.sql_helper import *
+from SPARQLToSQL.mapping import *
+
 
 # Simple SPARQL query translator
 

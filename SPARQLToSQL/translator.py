@@ -1,8 +1,5 @@
-from SPARQLToSQL.Translator.sql_functions import *
-from SPARQLToSQL.Parser.SparqlParser import SparqlParser, ErrorNode
-from SPARQLToSQL.Parser.SparqlLexer import SparqlLexer
-from SPARQLToSQL.Helpers.parser_helper import *
-from SPARQLToSQL.Helpers.translation_helper import *
+from SPARQLToSQL.parser_helper import *
+from SPARQLToSQL.sql_functions import *
 
 
 # Main translator function
