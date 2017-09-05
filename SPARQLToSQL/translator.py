@@ -5,13 +5,13 @@ from SPARQLToSQL.sql_functions import *
 from SPARQLToSQL.parser_helper import *
 from SPARQLToSQL.sql_functions import *
 
-def translate(sparql_query):
+def translate(sparql_query=None):
     load_yaml()
 
     # if no SPARQL query is provided, read from console
     if(sparql_query is None):
         sparql_query = stdin.readline()
-        
+
     tree = parse_sparql_string(sparql_query)
     project_list = var_to_string(tree.selectQuery().var())
     group_graph_pattern = tree.selectQuery().whereClause().groupGraphPattern()
