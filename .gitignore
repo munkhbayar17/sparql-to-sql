@@ -11,3 +11,9 @@ Parser/__pycache__/
 Translator/__pycache__/
 *.pyc
 *.db
+env
+env*
+dist
+build
+*.egg
+*.egg-info
