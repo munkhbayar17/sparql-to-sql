@@ -3,7 +3,7 @@ from setuptools import setup
 setup(name='SPARQLToSQL',
       description='An SPARQL-to-SQL translator',
       long_description='An SPARQL-to-SQL translator based on a semantics-preserving translation approach by Artem Chebotko',
-      version='0.1.0',
+      version='0.1.2',
       url='https://github.com/munkhbayar17/sparql-to-sql',
       author='M. Nergui',
       author_email='muunuu17@gmail.com',
@@ -21,7 +21,7 @@ setup(name='SPARQLToSQL',
       python_requires='>=3.6',
       entry_points={
           'console_scripts': [
-              'encrypt=SPARQLToSQL.main:translate'
+              'encrypt=SPARQLToSQL.translator:translate'
           ]
       }
 )
