@@ -3,7 +3,7 @@ from setuptools import setup
 setup(name='SPARQLToSQL',
       description='An SPARQL-to-SQL translator',
       long_description='An SPARQL-to-SQL translator based on a semantics-preserving translation approach by Artem Chebotko',
-      version='0.1.5',
+      version='0.1.7',
       url='https://github.com/munkhbayar17/sparql-to-sql',
       author='M. Nergui',
       author_email='muunuu17@gmail.com',

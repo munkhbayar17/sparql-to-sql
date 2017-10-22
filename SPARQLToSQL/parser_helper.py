@@ -3,7 +3,7 @@ from antlr4.tree import Tree
 from SPARQLToSQL.RDFClasses import *
 from SPARQLToSQL.SparqlParser import *
 from SPARQLToSQL.auxiliary_functions import *
-
+from SPARQLToSQL.mapping import get_base_prefix, get_prefix_value, get_prefix_var
 
 # parser helper
 
@@ -36,8 +36,25 @@ def get_var(var):
 
 
 def get_IRI(iri):
-	return IRI(str(iri.prefixedName().PNAME_LN()))
+	# normal IRI
+	if(iri.prefixedName()):
+		iri_val = str(iri.prefixedName().PNAME_LN())
 
+		if(get_prefix_var() and get_prefix_value() and ':' in iri_val):
+			str_array = iri_val.split(':')
+			prefix_var = str_array[0]
+			if(get_prefix_var() == prefix_var):
+				return compose_iri(get_prefix_value(), str_array[1])
+
+		return IRI(iri_val)
+	# IRI with base declaration
+	termNode = str(getTerminalNode(iri))
+	if(get_base_prefix()):
+		if(len(termNode) > 2 and termNode[0] == '<' and termNode[-1] == ">"):
+			termNode = str(termNode)
+			return compose_iri(get_base_prefix(), termNode[1:len(termNode)-1])
+	else:
+		return IRI(str(termNode))
 
 def get_literal(literal):
 	stringLiteral = literal.rdfLiteral().string().STRING_LITERAL1()
@@ -91,7 +108,6 @@ def getTerminalNode(parent):
 		if isinstance(child, TerminalNode):
 			return child
 
-
 # get subject string when the subject is IVL
 def get_subject(varOrTerm):
 	if isinstance(varOrTerm, SparqlParser.VarOrTermContext):
@@ -139,3 +155,7 @@ def var_to_string(varList):
 		return strList
 	else:
 		return get_var(varList).to_string()
+
+def compose_iri(base_pre, str):
+	iri_str = "{0}{1}>".format(base_pre[0: len(base_pre)-1], str)
+	return IRI(iri_str)
