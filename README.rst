@@ -1,0 +1,1 @@
+Libraries to install: sqlite3, threading, os, webbrowser, json, flask, format-sql, rdflib
