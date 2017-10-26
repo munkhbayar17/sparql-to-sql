@@ -1,0 +1,6 @@
+recursive-include SPARQLToSQL/static/css *.css
+recursive-include SPARQLToSQL/static/js *.js
+recursive-include SPARQLToSQL/static/img *.gif
+recursive-include SPARQLToSQL/sql *.sql
+recursive-include SPARQLToSQL/rdf *.rdf
+recursive-include SPARQLToSQL/templates *.html

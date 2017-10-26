@@ -1,4 +1,4 @@
-from SPARQLToSQL.RelationalClasses import *
+from RelationalClasses import *
 
 
 # SQL class helpers

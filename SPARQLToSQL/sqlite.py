@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-from SPARQLToSQL.constants import *
+from constants import *
 
 
 def init_sqlite(build_mode=False):

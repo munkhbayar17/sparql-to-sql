@@ -1,10 +1,10 @@
 from sys import stdin
-from SPARQLToSQL.mapping import load_yaml
-from SPARQLToSQL.SparqlLexer import *
-from SPARQLToSQL.sql_functions import *
-from SPARQLToSQL.parser_helper import *
-from SPARQLToSQL.sql_functions import *
-from SPARQLToSQL.mapping import save_base_prefix
+from mapping import load_yaml
+from SparqlLexer import *
+from sql_functions import *
+from parser_helper import *
+from sql_functions import *
+from mapping import save_base_prefix
 
 def trans(pattern, trans_mode = 1):
 	"""

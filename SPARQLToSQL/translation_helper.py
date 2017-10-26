@@ -1,7 +1,7 @@
 from antlr4.tree import Tree
-from SPARQLToSQL.RelationalClasses import SQLProject
+from RelationalClasses import SQLProject
 
-from SPARQLToSQL.RDFClasses import *
+from RDFClasses import *
 
 
 # translator helper

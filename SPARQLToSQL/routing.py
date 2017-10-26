@@ -3,8 +3,8 @@ import json
 from flask import Flask
 from flask import (render_template, request)
 
-from SPARQLToSQL.controller import *
-from SPARQLToSQL.sqlite import run_query, validate_query
+from controller import *
+from sqlite import run_query, validate_query
 
 app = Flask(__name__)
 
