@@ -1,8 +1,8 @@
 import yaml
 
-from Classes import Relation
-from constants import *
-from SparqlParser import TerminalNode
+from SPARQLToSQL.Classes import Relation
+from SPARQLToSQL.constants import *
+from SPARQLToSQL.SparqlParser import TerminalNode
 
 
 def load_yaml(test_mode=False):

@@ -1,4 +1,4 @@
-from RDFClasses import IRI
+from SPARQLToSQL.RDFClasses import IRI
 
 
 class SQLQuery:

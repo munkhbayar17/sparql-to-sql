@@ -1,8 +1,8 @@
 import json
 
-from sqlite import run_query, validate_query, select_db, fetch_predicates, reload_datasets, get_db_name
-from translator import *
-from parser_helper import var_to_string
+from SPARQLToSQL.sqlite import run_query, validate_query, select_db, fetch_predicates, reload_datasets, get_db_name
+from SPARQLToSQL.translator import *
+from SPARQLToSQL.parser_helper import var_to_string
 
 
 def translate(sparql_query, test_mode=False):

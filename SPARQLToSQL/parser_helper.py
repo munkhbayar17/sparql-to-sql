@@ -1,9 +1,9 @@
 from antlr4.tree import Tree
 
-from RDFClasses import *
-from SparqlParser import *
-from auxiliary_functions import *
-from mapping import get_base_prefix, get_prefix_value, get_prefix_var
+from SPARQLToSQL.RDFClasses import *
+from SPARQLToSQL.SparqlParser import *
+from SPARQLToSQL.auxiliary_functions import *
+from SPARQLToSQL.mapping import get_base_prefix, get_prefix_value, get_prefix_var
 
 # parser helper
 

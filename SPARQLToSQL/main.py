@@ -12,9 +12,9 @@
 
 import threading, webbrowser
 
-from sqlite import init_sqlite
-from controller import translate
-from mapping import load_yaml
+from SPARQLToSQL.sqlite import init_sqlite
+from SPARQLToSQL.controller import translate
+from SPARQLToSQL.mapping import load_yaml
 
 
 def init_translator():
@@ -23,7 +23,7 @@ def init_translator():
 
 
 def init_server():
-	from routing import app
+	from SPARQLToSQL.routing import app
 	app.config['debug'] = True
 	url = "http://127.0.0.1:9292"
 	threading.Timer(1, lambda: webbrowser.open(url)).start()

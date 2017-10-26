@@ -1,15 +1,12 @@
 import sqlite3
 import os
 
-from constants import *
+from SPARQLToSQL.constants import *
 
 
 def init_sqlite(build_mode=False):
 	global sql_path
-	sql_path = ""
-
-	if(build_mode):
-		sql_path = "SPARQLToSQL/"
+	sql_path = "SPARQLToSQL/"
 
 	# create persons
 	print("Building dataset in sqlite ...")
