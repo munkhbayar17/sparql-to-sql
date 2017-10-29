@@ -5,15 +5,13 @@ from SPARQLToSQL.constants import *
 
 
 def init_sqlite(build_mode=False):
-	global sql_path
-	sql_path = "SPARQLToSQL/"
 
 	# create persons
 	print("Building dataset in sqlite ...")
 
-	persons_conn_str = sql_path + "persons.db"
-	capitals_conn_str = sql_path + "capitals.db"
-	currencies_conn_str = sql_path + "currencies.db"
+	persons_conn_str = "persons.db"
+	capitals_conn_str = "capitals.db"
+	currencies_conn_str = "currencies.db"
 
 	global connPersons
 	global connCurrencies
@@ -22,20 +20,20 @@ def init_sqlite(build_mode=False):
 	if os.path.isfile(persons_conn_str):
 		connPersons = create_connection(persons_conn_str)
 	else:
-		connPersons = create_connection(persons_conn_str)
+		connPersons = create_connection("persons.db")
 		insert_persons(connPersons)
 
 	if os.path.isfile(capitals_conn_str):
 		connCapitals = create_connection(capitals_conn_str)
 	else:
-		connCapitals = create_connection(capitals_conn_str)
-		load_from_rdf(connCapitals, "rdf/capitals.rdf")
+		connCapitals = create_connection("capitals.db")
+		load_from_rdf(connCapitals, "capitals.rdf")
 
 	if os.path.isfile(currencies_conn_str):
 		connCurrencies = create_connection(currencies_conn_str)
 	else:
-		connCurrencies = create_connection(currencies_conn_str)
-		load_from_rdf(connCurrencies, "rdf/currencies.rdf")
+		connCurrencies = create_connection("currencies.db")
+		load_from_rdf(connCurrencies, "currencies.rdf")
 
 	global current_connection
 	current_connection = connPersons
@@ -49,11 +47,11 @@ def init_sqlite(build_mode=False):
 def select_db(db_name):
 	global current_connection
 	if db_name == "Persons":
-		current_connection = create_connection(sql_path + "persons.db")
+		current_connection = create_connection("persons.db")
 	elif db_name == "Capitals":
-		current_connection = create_connection(sql_path + "capitals.db")
+		current_connection = create_connection("capitals.db")
 	elif db_name == "Currencies":
-		current_connection = create_connection(sql_path + "currencies.db")
+		current_connection = create_connection("currencies.db")
 	current_db_name = db_name
 
 
@@ -91,10 +89,10 @@ def insert(conn, sub, pre, obj):
 
 def insert_persons(conn):
 	try:
-		create_table_sql = open(sql_path + "sql/create_table.sql", "r")
+		create_table_sql = open("create_table.sql", "r")
 		create_table(conn, create_table_sql.read())
 
-		insert_sql = open(sql_path + "sql/persons.sql", "r").read()
+		insert_sql = open("persons.sql", "r").read()
 		cursor = conn.cursor()
 		cursor.executescript(insert_sql)
 		print(insert_sql)
@@ -108,7 +106,7 @@ def validate_query(select_sql):
 
 	try:
 		# if table is not created then create it
-		create_table_sql = open(sql_path + "sql/create_table.sql", "r")
+		create_table_sql = open("create_table.sql", "r")
 		create_table(current_connection, create_table_sql.read())
 
 		cursor = current_connection.cursor()
@@ -129,7 +127,7 @@ def validate_query(select_sql):
 def run_query(select_sql):
 	try:
 		# if table is not created then create it
-		create_table_sql = open(sql_path + "sql/create_table.sql", "r")
+		create_table_sql = open("create_table.sql", "r")
 		create_table(current_connection, create_table_sql.read())
 
 		cursor = current_connection.cursor()
@@ -160,12 +158,12 @@ def truncate():
 
 def load_from_rdf(conn, filename):
 	try:
-		create_table_sql = open(sql_path + "sql/create_table.sql", "r")
+		create_table_sql = open("create_table.sql", "r")
 		create_table(conn, create_table_sql.read())
 
 		from rdflib.graph import Graph
 		g = Graph()
-		g.parse(sql_path + filename, format="xml")
+		g.parse(filename, format="xml")
 
 		for subject, predicate, obj in g:
 			if (subject, predicate, obj) in g:
@@ -198,8 +196,8 @@ def fetch_predicates(db_name = None):
 def reload_datasets():
 	truncate()
 	insert_persons(connPersons)
-	load_from_rdf(connCapitals, "rdf/capitals.rdf")
-	load_from_rdf(connCurrencies, "rdf/currencies.rdf")
+	load_from_rdf(connCapitals, "capitals.rdf")
+	load_from_rdf(connCurrencies, "currencies.rdf")
 	return 1;
 
 def get_db_name():
