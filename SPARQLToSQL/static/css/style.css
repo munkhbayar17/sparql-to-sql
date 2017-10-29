@@ -3,7 +3,11 @@ html {
 }
 
 body {
-    background: url("../img/bg-white.gif");
+
+}
+
+select {
+	padding: 5px;
 }
 
 h1 {
@@ -34,6 +38,12 @@ h2 {
 	padding: 0 20px;
 	font-size: 18px;
 	justify-content: space-between;
+}
+
+.subcontrol {
+	display: inline;
+	width: 31%;
+	margin: 0 1%;
 }
 
 .db-selector select {
@@ -88,8 +98,16 @@ h2 {
 }
 
 button {
-    width: 150px;
-    height: 30px;
+    background-color: #4CAF50;
+    border: none;
+	border-radius: 5px;
+    color: white;
+    padding: 15px 30px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
 }
 
 /*result section*/

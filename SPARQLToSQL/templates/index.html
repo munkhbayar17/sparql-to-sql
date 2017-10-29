@@ -17,25 +17,30 @@
     <div ng-controller="translatorApp">
         <div class="controls">
 
-            <label>Dataset: </label>
-            <select ng-model="dbName" ng-change="change_db()">
-                <option selected>Persons</option>
-                <option>Capitals</option>
-                <option>Currencies</option>
-            </select>
-
-            <label>Translator algorithm: </label>
-            <select ng-model="translatorType">
-                <option selected value="1">Chebotko's original</option>
-                <option value="2">Chebotko's simplified</option>
-                <option value="3">Priyatna's simplified</option>
-            </select>
-
-            <div>
-                <label>Predicates: </label>
-                <select ng-model="predicate" ng-options="o as o for o in predicates"></select>
-                {{ '{{predicate}}' }}
+            <div class="control">
+                <div class="subcontrol">
+                    <label>Dataset: </label>
+                    <select ng-model="dbName" ng-change="change_db()">
+                        <option selected>Persons</option>
+                        <option>Capitals</option>
+                        <option>Currencies</option>
+                    </select>
+                </div>
+                <div class="subcontrol">
+                    <label>Translator algorithm: </label>
+                    <select ng-model="translatorType">
+                        <option selected value="1">Chebotko's original</option>
+                        <option value="2">Chebotko's simplified</option>
+                        <option value="3">Priyatna's simplified</option>
+                    </select>
+                </div>
+                <div class="subcontrol">
+                    <label>Predicates: </label>
+                    <select ng-model="predicate" ng-options="o as o for o in predicates"></select>
+                    {{ '{{predicate}}' }}
+                </div>
             </div>
+
         </div>
         <div class="sparql-section">
             <div class="query-section">

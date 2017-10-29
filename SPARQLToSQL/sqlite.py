@@ -89,8 +89,7 @@ def insert(conn, sub, pre, obj):
 
 def insert_persons(conn):
 	try:
-		create_table_sql = open("create_table.sql", "r")
-		create_table(conn, create_table_sql.read())
+		create_table(conn, '''CREATE TABLE IF NOT EXISTS Triple (s text NOT NULL, p text NOT NULL, o text NOT NULL);''')
 
 		insert_sql = open("persons.sql", "r").read()
 		cursor = conn.cursor()
@@ -106,8 +105,7 @@ def validate_query(select_sql):
 
 	try:
 		# if table is not created then create it
-		create_table_sql = open("create_table.sql", "r")
-		create_table(current_connection, create_table_sql.read())
+		create_table(current_connection, '''CREATE TABLE IF NOT EXISTS Triple (s text NOT NULL, p text NOT NULL, o text NOT NULL);''')
 
 		cursor = current_connection.cursor()
 		cursor.execute(select_sql)
@@ -127,8 +125,7 @@ def validate_query(select_sql):
 def run_query(select_sql):
 	try:
 		# if table is not created then create it
-		create_table_sql = open("create_table.sql", "r")
-		create_table(current_connection, create_table_sql.read())
+		create_table(current_connection, '''CREATE TABLE IF NOT EXISTS Triple (s text NOT NULL, p text NOT NULL, o text NOT NULL);''')
 
 		cursor = current_connection.cursor()
 		cursor.execute(select_sql)
@@ -158,8 +155,7 @@ def truncate():
 
 def load_from_rdf(conn, filename):
 	try:
-		create_table_sql = open("create_table.sql", "r")
-		create_table(conn, create_table_sql.read())
+		create_table(conn, '''CREATE TABLE IF NOT EXISTS Triple (s text NOT NULL, p text NOT NULL, o text NOT NULL);''')
 
 		from rdflib.graph import Graph
 		g = Graph()
